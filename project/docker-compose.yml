@@ -1,0 +1,26 @@
+version: '3.0'
+services:
+  rabbitmq:
+    image: rabbitmq:3
+    hostname: "rabbit"
+    environment:
+    - DEFAULT_USER=guest
+    - DEFAULT_PASS=guest
+    ports:
+      - "127.0.0.1:5672:5672"
+
+  python:
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "127.0.0.1:80:80"
+    build:
+      context: .
+      dockerfile: python.Dockerfile
+
+  rust:
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: rust.Dockerfile
